@@ -16,5 +16,5 @@ win: $(SOURCES)
 	gfortran -c modul.f90
 	gfortran -c main.f90
 	gfortran -o main.exe main.o modul.o
-	del main.o modul.o rutine.mod
+	rm main.o modul.o rutine.mod
 	mv main.exe ../main.exe
