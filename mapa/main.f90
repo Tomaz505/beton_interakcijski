@@ -116,11 +116,13 @@ program main
     !RAČUN PLASTICNEGA
 20  block
         real(dp) :: y_extr(2), ys_extr(2), y_crac(3), phi, i0, iy1, iy2, iy3, ixy0, ixy1, ixy2
-        real(dp) :: xy_eff(2,2*nv), xyt_eff(2,2*nv), xyt(2,nv), xyts(2,ns), rd(3,40600), rot(2,2)
+        real(dp) :: xy_eff(2,2*nv), xyt_eff(2,2*nv), xyt(2,nv), xyts(2,ns), rd(6,46200), rot(2,2)
         real(dp) :: def_pl(2), eps_s, eps_y
+        integer :: step1 = 231
         eps_y = fs/es
 
         xy_eff(:,:) = 0.0_dp
+
 
 
         do i=0,199
@@ -160,7 +162,7 @@ program main
                 call area_n(xy_eff,nv*2,iy1,1)
                 call area_ny1x(xy_eff,nv*2,ixy0,0)
 
-                rd(:,(i)*200+(j+1)) = -fc*(/i0, iy1, ixy0/)
+                rd(4:6,(i)*step1+(j+1)) = -fc*(/i0, iy1, ixy0/)
 
 
 
@@ -179,13 +181,14 @@ program main
                 call area_ny1x(xy_eff,nv*2,ixy2,2)
 
 
-                rd(:,(i)*200+(j+1)) = rd(:,(i)*200+(j+1)) + fc*(/(def_pl(2)/0.002_dp)**2*iy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy1 - (1-(1+def_pl(1)/0.002_dp)**2)*i0,(def_pl(2)/0.002_dp)**2*iy3 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy2 - (1-(1+def_pl(1)/0.002_dp)**2)*iy1 ,(def_pl(2)/0.002_dp)**2*ixy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*ixy1 - (1-(1+def_pl(1)/0.002_dp)**2)*ixy0/)
+                rd(4:6,(i)*step1+(j+1)) = rd(4:6,(i)*step1+(j+1)) + fc*(/(def_pl(2)/0.002_dp)**2*iy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy1 - (1-(1+def_pl(1)/0.002_dp)**2)*i0,(def_pl(2)/0.002_dp)**2*iy3 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy2 - (1-(1+def_pl(1)/0.002_dp)**2)*iy1 ,(def_pl(2)/0.002_dp)**2*ixy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*ixy1 - (1-(1+def_pl(1)/0.002_dp)**2)*ixy0/)
 
 
                 do k=1,ns
-                    rd(:,(i)*200+(j+1)) = rd(:,(i)*200+(j+1)) + (fs)*(/1.0_dp,xyts(2,k),xyts(1,k)/)*sig_eps_s(def_pl(1) + xyts(2,k)*def_pl(2),eps_y)*ds(k)**2*pi/4.0_dp
+                    rd(4:6,(i)*step1+(j+1)) = rd(4:6,(i)*step1+(j+1)) + (fs)*(/1.0_dp,xyts(2,k),xyts(1,k)/)*sig_eps_s(def_pl(1) + xyts(2,k)*def_pl(2),eps_y)*ds(k)**2*pi/4.0_dp
                 end do
 
+                rd(1:3,(i)*step1+(j+1)) = (/def_pl(1),def_pl(2), 0.0_dp/)
             end do
 
             !UPOGIB
@@ -217,7 +220,7 @@ program main
                 call area_n(xy_eff,nv*2,iy1,1)
                 call area_ny1x(xy_eff,nv*2,ixy0,0)
 
-                rd(:,(i)*200+(21 + j+1)) = -fc*(/i0, iy1 , ixy0/)
+                rd(4:6,(i)*step1+(21 + j+1)) = -fc*(/i0, iy1 , ixy0/)
 
                 xy_eff(:,:) = 0.0_dp
                 call eff_section(xyt,nv,y_crac(1),y_crac(2),xy_eff)
@@ -237,17 +240,92 @@ program main
 
 
 
-                rd(:,(i)*200+(21+j+1)) = rd(:,(i)*200+(21+j+1)) + fc*(/(def_pl(2)/0.002_dp)**2*iy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy1 - (1-(1+def_pl(1)/0.002_dp)**2)*i0,(def_pl(2)/0.002_dp)**2*iy3 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy2 - (1-(1+def_pl(1)/0.002_dp)**2)*iy1 , (def_pl(2)/0.002_dp)**2*ixy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*ixy1 - (1-(1+def_pl(1)/0.002_dp)**2)*ixy0/)
+                rd(4:6,(i)*step1+(21+j+1)) = rd(4:6,(i)*step1+(21+j+1)) + fc*(/(def_pl(2)/0.002_dp)**2*iy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy1 - (1-(1+def_pl(1)/0.002_dp)**2)*i0,(def_pl(2)/0.002_dp)**2*iy3 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy2 - (1-(1+def_pl(1)/0.002_dp)**2)*iy1 , (def_pl(2)/0.002_dp)**2*ixy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*ixy1 - (1-(1+def_pl(1)/0.002_dp)**2)*ixy0/)
 
                 do k=1,ns
-                    rd(:,(i)*200+(21+j+1)) = rd(:,(i)*200+(21+j+1)) +(fs)*(/1.0_dp,xyts(2,k),xyts(1,k)/)*sig_eps_s(def_pl(1) + xyts(2,k)*def_pl(2),eps_y)*ds(k)**2*pi/4.0_dp
+                    rd(4:6,(i)*step1+(21+j+1)) = rd(4:6,(i)*step1+(21+j+1)) +(fs)*(/1.0_dp,xyts(2,k),xyts(1,k)/)*sig_eps_s(def_pl(1) + xyts(2,k)*def_pl(2),eps_y)*ds(k)**2*pi/4.0_dp
                 end do
 
+                rd(1:3,(i)*step1+(21+j+1)) = (/def_pl(1),def_pl(2), 0.0_dp/)
             end do
-            rd(2:3, i*200 + 1 : i*200 +203) =matmul(rot,rd(2:3, i*200 + 1 : i*200 +203))
+
+            !ARMATURA V NATEGU
+            do j = 0,20
+
+                eps_s = (0.055_dp*j/20.0_dp)
+                def_pl(2) = (eps_s-0.055_dp)/(y_extr(2)-y_extr(1))
+                def_pl(1) = 0.055_dp + def_pl(2) *y_extr(1)
+
+                do k=1,ns
+                    rd(4:6,(i)*step1+(202+j+1)) = rd(4:6,(i)*step1+(202+j+1)) + (fs)*(/1.0_dp,xyts(2,k),xyts(1,k)/)*sig_eps_s(def_pl(1) + xyts(2,k)*def_pl(2),eps_y)*ds(k)**2*pi/4.0_dp
+                end do
+
+                rd(1:3,(i)*step1+(202+j+1)) = (/def_pl(1),def_pl(2), 0.0_dp/)
+            end do
+
+            !BETON Upogib
+            do j = 0,7
+
+                eps_c = -(0.0035_dp*j/7.0_dp)
+                def_pl(2) = (eps_c-0.055_dp)/(y_extr(2)-y_extr(1))
+                def_pl(1) = 0.055_dp + def_pl(2) *y_extr(1)
+
+
+                !Pomembe y vrednosti
+                y_crac(1) = (-def_pl(1))/def_pl(2)
+                y_crac(2) = (-0.002_dp-def_pl(1))/def_pl(2)
+                y_crac(3)= (-0.0035_dp-def_pl(1))/def_pl(2)
+
+
+                i0 = 0.0_dp
+                iy1 = 0.0_dp
+                iy2 = 0.0_dp
+                iy3 = 0.0_dp
+                ixy0 = 0.0_dp
+                ixy1 = 0.0_dp
+                ixy2 = 0.0_dp
+
+                xy_eff(:,:) = 0.0_dp
+                call eff_section(xyt,nv,y_crac(2),y_crac(3),xy_eff)
+
+                call area_n(xy_eff,nv*2,i0,0)
+                call area_n(xy_eff,nv*2,iy1,1)
+                call area_ny1x(xy_eff,nv*2,ixy0,0)
+
+                rd(4:6,(i)*step1+(223 + j+1)) = -fc*(/i0, iy1 , ixy0/)
+
+                xy_eff(:,:) = 0.0_dp
+                call eff_section(xyt,nv,y_crac(1),y_crac(2),xy_eff)
+
+                i0 = 0.0_dp
+                iy1 = 0.0_dp
+                ixy0 = 0.0_dp
+
+                call area_n(xy_eff,nv*2,i0,0)
+                call area_n(xy_eff,nv*2,iy1,1)
+                call area_n(xy_eff,nv*2,iy2,2)
+                call area_n(xy_eff,nv*2,iy3,3)
+                !Integral y^2*x
+                call area_ny1x(xy_eff,nv*2,ixy0,0)
+                call area_ny1x(xy_eff,nv*2,ixy1,1)
+                call area_ny1x(xy_eff,nv*2,ixy2,2)
+
+
+
+                rd(4:6,(i)*step1+(223+j+1)) = rd(4:6,(i)*step1+(223+j+1)) + fc*(/(def_pl(2)/0.002_dp)**2*iy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy1 - (1-(1+def_pl(1)/0.002_dp)**2)*i0,(def_pl(2)/0.002_dp)**2*iy3 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*iy2 - (1-(1+def_pl(1)/0.002_dp)**2)*iy1 , (def_pl(2)/0.002_dp)**2*ixy2 + 2*(1.0_dp+def_pl(1)/0.002_dp)*def_pl(2)/0.002_dp*ixy1 - (1-(1+def_pl(1)/0.002_dp)**2)*ixy0/)
+
+                do k=1,ns
+                    rd(4:6,(i)*step1+(223+j+1)) = rd(4:6,(i)*step1+(223+j+1)) + (fs)*(/1.0_dp,xyts(2,k),xyts(1,k)/)*sig_eps_s(def_pl(1) + xyts(2,k)*def_pl(2),eps_y)*ds(k)**2*pi/4.0_dp
+                end do
+
+                rd(1:3,(i)*step1+(223+j+1)) = (/def_pl(1),def_pl(2), 0.0_dp/)
+            end do
+
+            rd(5:6, i*step1 + 1 : i*step1 +232) =matmul(rot,rd(5:6, i*step1 + 1 : i*step1 +232))
+            rd(2:3, i*step1 + 1 : i*step1 +232) =matmul(rot,rd(2:3, i*step1 + 1 : i*step1 +232))
         end do
 
-        call write_js(xy,nv,rd,40600,ed,ned,analiza,xys,ds,ns)
+        call write_out(rd,46200)
     end block
 goto 110
 

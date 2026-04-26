@@ -87,6 +87,28 @@ module rutine
         close(1)
     end subroutine
 
+
+    subroutine write_out(rd,nrd)
+        !n-stevilo vozlisc
+        !deg-stopnja potence y^deg v integralu
+        !a - vhodna količina
+        !xy - koordinate vozlisc
+
+        integer :: nrd
+        real(dp) :: rd(:,:)
+
+        open (unit = 1,file = "out.csv",status = "old")
+
+        write(1,*) "eps_0,kappa_x,kappa_y,Ned,MxEd,MyEd"
+
+        do i=1,nrd
+            write(1,*) rd(1,i),",",rd(2,i),",",rd(3,i),",",rd(4,i),",",rd(5,i),",",rd(6,i)
+        end do
+        !write(1,*) "`;"
+
+        close(1)
+    end subroutine
+
     function sig_eps_s(eps,ey) result(s)
         real(dp) :: eps, ey, s
         if ((eps <= ey) .and. (eps >= -ey)) then
