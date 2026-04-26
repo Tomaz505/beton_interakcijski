@@ -324,7 +324,7 @@ program main
             rd(5:6, i*step1 + 1 : i*step1 +232) =matmul(rot,rd(5:6, i*step1 + 1 : i*step1 +232))
             rd(2:3, i*step1 + 1 : i*step1 +232) =matmul(rot,rd(2:3, i*step1 + 1 : i*step1 +232))
         end do
-
+        call write_js(xy,nv,rd(4:6,:),46200,ed,ned,analiza,xys,ds,ns)
         call write_out(rd,46200)
     end block
 goto 110

@@ -21,16 +21,30 @@
 <h2>Analiza betonskega prereza</h2>
 <p class = "narrow-text", text-align: "center">
 V datoteko in.txt vnesemo željene podatke, kjer se moramo strogo držati predpisane strukture.
-Program je napisan v jeziku Fortran zato je potrebno programu povedati koliko vozlišč in obtežnih primerov bomo vnesli, da lahko progra alocira potreben spomin.
-Ko smo vnesli željene podatke odpremo datoteko main.exe.
-Račun je zelo hiter, zato lahko po tem ko odpremo datoteko osvežimo brskalnik kjer je odprt prikaz.html.
+<ol>
+  <li>Vrsta analize (2-edina možnost)</li>
+  <li>Tlačna trdnost betona</li>
+  <li>Elastični modul betona</li>
+  <li>Natezna trdnost jekla</li>
+  <li>Elastični modul jekla</li>
+  <li>Število vozlišč prereza</li>
+  <li>Število vozlišč armature</li>
+  <li>Število primerov obtežbe</li>
+  <li>Koordinate vozlišč prereza (x1, y1, x2, y2...)</li>
+  <li>Koordinate armature (x1, y1, x2, y2...)</li>
+  <li>Premer armature (d1, d2...)</li>
+  <li>Obtežni primeri (Ned1, Mxed1, Myed1, Ned2, Mxed2, Myed2...)</li>
+</ol>
+
+Zaženemo datoteko main.exe in osvežimo oziroma odpremo prikaz.html. Možen je tudi samostojna obdelava z podatki iz out.csv.
 </p>
 <h3>Rezultati</h3>
 <p class = "narrow-text">
-Z klikom na element legente ga odstranimo iz pogleda. Če je rob telesa, ki ga omejuje interakcijki diagram, konveksen je dovolj, da preverimo če projekcije vplivov ležijo znotraj treh projekcije diagrama.
+Vsi prikazi so interaktivni. Območje prikaza se lahko premika in približa oziroma oddalji. 3D pogled se lahko rotira. Elemente v prikazu se lahko odstrani z klikom na legendo elementa. Z lebdenjem miške nad diagrami se izpišejo podatki točk.
 </p>
 
 <div id="chart2" style="width:800px;height:800px;"></div>
+<div id="chart3" style="width:800px;height:800px;"></div>
 <div id="chart" style="width:800px;height:800px;"></div>
 
 
@@ -370,7 +384,37 @@ var layout = {
     //grid:  {rows:1,columns:2, pattern: 'independent'}
 };
 
-
+var trace61 = {
+    x: mrd1el.slice(0,230),
+    y: nrdel.slice(0,230),
+    xaxis: 'x2',
+    yaxis: 'y2',
+    mode: 'lines',
+    type: 'scatter',
+    marker: {color:'purple'},
+    showlegend : false,
+};
+var trace62 = {
+    x: mrd1el.slice(23100,23331),
+    y: nrdel.slice(23100,23331),
+    xaxis: 'x2',
+    yaxis: 'y2',
+    mode: 'lines',
+    type: 'scatter',
+    marker: {color:'purple'},
+    showlegend : false,
+};
+var trace63 = {
+    x: edData_Mx,
+    y: edData_N,
+    xaxis: 'x2',
+    yaxis: 'y2',
+    mode: 'markers',
+    type: 'scatter',
+    name : 'Ed',
+    marker: { size: 10 ,color:'#df1c44',opacity: 1,sizerel: 10,symbol: 'x'},
+    showlegend : true,
+};
 
 // Render
 Plotly.newPlot('chart',[trace1,trace4], layout);
@@ -380,6 +424,9 @@ Plotly.newPlot('chart2', [trace2,trace5],layout2);
 Plotly.newPlot('chart2', [trace2,trace3,trace5],layout2);
 
 }
+
+Plotly.newPlot('chart3', [trace61,trace62,trace63]);
+
 
 </script>
 
